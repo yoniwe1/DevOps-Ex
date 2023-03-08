@@ -1,0 +1,8 @@
+Change directory to /proc.
+
+    Q: What CPU(s) is the system running on?
+    A: sudo cat cpuinfo -> Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz, 8 CPU core * 2 Threads per core = 16 Total threads
+    
+    Q: How much RAM does it currently use?
+    A: 
+    
