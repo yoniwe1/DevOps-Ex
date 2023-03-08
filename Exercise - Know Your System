@@ -1,8 +1,22 @@
 Change directory to /proc.
 
     Q: What CPU(s) is the system running on?
-    A: sudo cat cpuinfo -> Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz, 8 CPU core * 2 Threads per core = 16 Total threads
+    A: cat cpuinfo or lscpu -> Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz, 8 CPU core * 2 Threads per core = 16 Total threads
     
     Q: How much RAM does it currently use?
-    A: 
+    A: cat meminfo or free -m -> 4703KB=4.5MB
+    
+    Q: How much swap space do you have?
+    A: SwapTotal:       2097148 kB
+    
+    Q: What drivers are loaded?
+    A: cat modules or lsmod
+    
+    Q: How many hours has the system been running?
+    A: /proc/uptime or uptime -> up  4:05
+    
+    Q: Which filesystems are known by your system?
+    A: cat filesystems or lsmod | grep zfs
+    
+    
     
