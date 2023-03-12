@@ -1,22 +1,37 @@
 Change directory to /proc.
 
     Q: What CPU(s) is the system running on?
-    A: cat cpuinfo or lscpu -> Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz, 8 CPU core * 2 Threads per core = 16 Total threads
+    A: cat cpuinfo or lscpu 
     
     Q: How much RAM does it currently use?
-    A: cat meminfo or free -m -> 4703KB=4.5MB
+    A: cat meminfo or free -m
     
     Q: How much swap space do you have?
-    A: SwapTotal:       2097148 kB
+    A: same as previous
     
     Q: What drivers are loaded?
     A: cat modules or lsmod
     
     Q: How many hours has the system been running?
-    A: /proc/uptime or uptime -> up  4:05
+    A: /proc/uptime or uptime
     
     Q: Which filesystems are known by your system?
     A: cat filesystems or lsmod | grep zfs
     
+Change directory to /proc.
     
+    Q: How long does the system keep the log file in which user logins are monitored?
+    A: cat logrotate.conf
+    
+    Q: How many users are defined on your system? Don't count them, let the computer do it for you using wc!
+    A: cat passwd and count or wc -l /etc/passwd
+    
+    Q: How many groups do you have?
+    A: cat group and count or wc -l /etc/group
+    
+    Q: Which version of bash is installed on this system?
+    A: echo $BASH_VERSION or bash --version
+    
+    Q: Where is the time zone information kept?
+    A: cat timezone or date
     
