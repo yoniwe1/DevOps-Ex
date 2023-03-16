@@ -1,2 +1,29 @@
 Q: Create a directory in your home directory. In that directory, create a series of files and directories.
-A: 
+A: cd ~
+   mkdir testFolder1 testFolder2 testFolder3 testFolder4
+   touch testFile1 testFile2 testFile3 testFile4
+   touch testFolder1/testFile5
+   touch testFolder3/testFile6 testFolder3/testFile7
+   
+Q: Delete one of the directories that has other files and directories in them, preferably in 1 command. Are you able to remove non-empty directory?
+A: rm -r testFolder1/ -> for non-empty directory
+   rmdir testFolder2/ -> for empty directory
+
+Q: Copy the complete content of a one directory to another, in 1 command.
+A: cp -a /testFolder3/. /testFolder4/
+
+Q: Rename one of the files (how?).
+A: mv testFile1 newTestFile1
+
+Q: Create a file and its name contain space, e.g. my file.txt
+A: it created two different files named my and file.txt
+
+Q: Now go to your home directory using 4 different methods?
+A: cd ~
+   cd /home/jonathan
+   cd $HOME
+   cd / -> cd home -> cd jonathan
+   
+   
+   
+   
