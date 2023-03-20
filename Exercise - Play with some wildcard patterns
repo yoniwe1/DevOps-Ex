@@ -1,1 +1,16 @@
+cd /etc
 
+Q: List files/directories with only files that contain an extension.
+A: ls -ld *.*
+
+Q: List files/directories with only a 3 letter extension.
+A: ls -ld *.???
+
+Q: List files/directories whose name contains an uppercase letter.
+A: ls -ld *[A-Z]*
+
+Q: List all python file (files with .py extension).
+A: ls -l *.py
+
+Q: List files/directories whose name is 4 characters long.
+A: ls -ld [a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]
