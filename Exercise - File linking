@@ -1,0 +1,38 @@
+cd ~
+
+Q: Create a file called test1.
+A: touch test1
+
+Q: Create a hard link to test2 to the file you've just created.
+A: ln test1 test2
+
+Q: Verify that the two files are sharing the same inode.
+A: ls -i test1 test2
+
+Q: Change test1 content by echo "hi" >> test1
+A: echo "hi" >> test1
+
+Q: How does test2 look like?
+A: cat test2 -> the same as test1 as it points to the same location in the memory
+
+Q: What happens when you copy test2 to another directory? What happens when you move test2 to another directory?
+A: mkdir temp
+   cp test2 temp/
+   cat temp/test2 -> "hi"
+   
+   upon copy -> both copies point to the correct place and contain the text "hi"
+   
+   rm temp/test2
+   mv test2 temp/
+   cat temp/test2 -> "hi"
+   
+   upon move -> nothing happens. test2 under temp still contains the text "hi"
+   
+Q: Create a symlink for test1.
+A: ln -s test1 test3
+
+Q: Remove test1, what happened to the symlink you've just created?
+A: rm test1
+
+   test3 is now a broken link as the file it pointed to is no longer available on the path, and the pointer on the file descriptor that pointed to it points to null.
+  
