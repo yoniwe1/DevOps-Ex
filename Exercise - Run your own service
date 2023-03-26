@@ -3,3 +3,106 @@ You are not required to manually start and/or stop it.
 A 'systemd service file' is a file that is written in a format such that systemd is able to parse and understand it, and later on do what you told it to do.
 'systemd service file'=='systemd unit'.
 # Systemd service file structure
+The systemd service file's extension is '.service' and we use the pound/hash symbol (#) for single line comments.
+
+[Unit]
+Description=Apache web server
+After=network.target
+Before=nextcloud-web.service
+
+[Service]
+ExecStart=/usr/local/apache2/bin/httpd -D FOREGROUND -k start
+ExecReload=/usr/local/apache2/bin/httpd -k graceful
+Type=notify
+Restart=always
+
+
+[Install]
+WantedBy=default.target
+RequiredBy=network.target
+
+The [Unit] section contains details and description about the unit itself. 
+In our case, it contains details about the service. Details like 'what is its description', 'what are its dependencies' and more.
+
+Description:- Human-readable title of the systemd service.
+After:- Set dependency on a service. For example, if you are configuring Apache web server, you want the server to start after the network is online. 
+        This typically includes targets or other services.
+Before:- Start current service before specified service. In this example, I tell that "I want Apache web server running before the service for Nextcloud is started".
+This is because, in my case, Nextcloud server depends on the Apache web server. This too, like After, includes targets or other services.
+
+The [Service] section contains details about the execution and termination of service.
+
+ExecStart:- The command that needs to be executed when the service starts. In our case, we want the Apache server to start.
+ExecReload:- This is an optional field. It specifies how a service is restarted.
+             For services that perform disk I/O (especially writing to disk, like a database), it is best to gracefully kill them and start again.
+             Use this field in case you wish to have a specific restart mechanism.
+Type:- This indicates the start-up type of a process for a given systemd service. Options are simple, exec, forking, oneshot, dbus, notify and idle.
+      (more info on: https://www.freedesktop.org/software/systemd/man/systemd.service.html?ref=linux-handbook#Options)
+Restart:- This is another optional field but one that you will very likely use. 
+          This specifies if a service should be restarted--depending on circumstances--or not. 
+          The available options are no, on-success, on-failure, on-abnormal, on-watchdog, on-abort and always.
+          
+The [Install] section, as the name says, handles the installation of a systemd service/unit file.
+This is used when you run either systemctl enable or systemctl disable command for enabling or disabling a service.
+
+WantedBy:- This is similar to the After and Before fields, but the main difference is that this is used to specify systemd-equivalent "runlevels".
+           The default.target is when all the system initialization is complete--when the user is asked to log in.
+           Most user-facing services (like Apache, cron, GNOME-stuff, etc.) use this target.
+RequiredBy:- This field might feel very similar to WantedBy, but the main difference is that this field specifies hard dependencies.
+             Meaning, if a dependency is missing, this service will fail.
+             
+For a complete documentation about systemd, please refer to this page: https://www.freedesktop.org/wiki/Software/systemd/?ref=linux-handbook. This literally has everything documented!
+
+a systemd service could need superuser privileges, or otherwise be executed as a normal user.
+The primary difference between a service being executed by root and a normal user is the location of the systemd service file.
+
+Systemd service for root user
+
+a service for root user might start with a script under: /root/.scripts/<do-something>.sh.
+Let us create a systemd service file for this. But before that is done, one must konw where to place the 'systemd service file' that needs superuser privileges.
+
+Usually, it is considered a good practice to put these systemd service files inside the /etc/systemd/system/ directory.
+
+Therefore, we can create a file <service-name>.service; its full path being /etc/systemd/system/<SERVICE-NAME>.service.
+
+on this file we will probably need ExecStart=/usr/bin/bash /root/.scripts/<do-something>.sh under [Service] section..
+
+save this file and now that the systemd service file is ready and placed under the /etc/systemd/system/ directory, let us look at how to enable it.
+
+To tell systemd to read our service file, we need to issue the following command: sudo systemctl daemon-reload.
+
+Doing so will make systemd aware of our newly created systemd service file.
+
+Now, we can enable our systemd service. The syntax to do so is as following: sudo systemctl enable <SERVICE-NAME>.service
+
+Our service is now enabled. But how can we verify that? Below is the syntax for checking the status of a systemd service:
+
+sudo systemctl is-enabled <SERVICE-NAME>.service
+
+Systemd service for normal user
+
+might begin with a script under: /home/<your-username>/.scripts/<do-something>.sh
+
+Okay, now let's create a systemd service file for it. But before that is done, one must know where to place a normal user's systemd service (unit) files.
+Systemd service files belonging to a normal user go inside the ~/.config/systemd/user/ directory.
+
+Usually, the ~/.config/systemd/user/ directory will not exist, so it needs to be created. Do so with the following command:
+mkdir -p ~/.config/systemd/user.
+
+Now that our systemd user directory is created, we can create a service too.
+I will save this systemd service file as ~/.config/systemd/user/<USER-SERVICE-NAME>.service.
+It will contain under [Service] section: ExecStart=/usr/bin/bash /home/<your-username>/.scripts/<do-something>.sh
+
+But before we enable our service, just like we did with the systemd root service, we need to reload systemd in a way that it is made aware of our newly created systemd service file.
+That will be done by running the following command: systemctl --user daemon-reload
+
+This time, we don't need the sudo command, since we don't need superuser privileges. 
+But what we need is the --user option. Below is the syntax to enable a user service: systemctl --user enable <USER-SERVICE-NAME>.service
+
+Now that the service is enabled, let's verify it! The syntax to check the status of a systemd user service is:
+systemctl --user is-enabled <USER-SERVICE-NAME>.service
+
+link to the referenced explenation here: https://linuxhandbook.com/create-systemd-services/
+
+
+
