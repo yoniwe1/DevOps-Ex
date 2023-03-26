@@ -1,0 +1,5 @@
+Simply put, a service is a "background process" that is started or stopped based on certain circumstances.
+You are not required to manually start and/or stop it.
+A 'systemd service file' is a file that is written in a format such that systemd is able to parse and understand it, and later on do what you told it to do.
+'systemd service file'=='systemd unit'.
+# Systemd service file structure
