@@ -43,9 +43,9 @@ response=$(curl -s http://ip-api.com/json/$1)
 
 #if GET-HTTP request succedded print country, city and region name
 if [[ $(echo $response | jq -r '.status') == "success" ]]; then
-  echo $response | jq -r '.country'
-  echo $response | jq -r '.city'
-  echo $response | jq -r '.regionName'
+  echo -n "Country: " && echo $response | jq -r '.country'
+  echo -n "City: " && echo $response | jq -r '.city'
+  echo -n "Region name: " && echo $response | jq -r '.regionName'
 else
   echo "no host response from $1"
   exit 1
